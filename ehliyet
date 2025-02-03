@@ -1,17 +1,38 @@
-#Excel tablosundaki yaş sütununa göre ehliyet alıp almayacağını belirten program
 import pandas as pd
+import os
 
-#Ehliyet alıp almamamasını fonksiyonla kontrol eder
+# Çalışma dizinini kontrol eder
+print("Çalışma dizini:", os.getcwd())
+
+# Dosyanın olup olmadığını kontrol eder
+if not os.path.exists("yas_verileri.xlsx"):
+    print("Hata: 'yas_verileri.xlsx' bulunamadı!")
+else:
+    print("Dosya bulundu, işleme devam ediliyor.")
+
+# Excel dosyasını okur
+df = pd.read_excel("yas_verileri.xlsx", engine="openpyxl")
+
+# Sütunları kontrol eder
+print("Sütunlar:", df.columns)
+
+# Eğer "Yaş" sütunu yanlış isimlendirilmişse düzeltir
+if "Yaş" not in df.columns:
+    print("Hata: 'Yaş' sütunu bulunamadı, sütun isimlerini kontrol edin.")
+else:
+    print("'Yaş' sütunu bulundu.")
+
+# "Yaş" sütununu sayıya çevirir
+df["Yaş"] = pd.to_numeric(df["Yaş"], errors="coerce")
+
+# Ehliyet kontrol fonksiyonu yazılır
 def ehliyet_kontrol(yas):
     return "Ehliyet alabilir." if yas >= 18 else "Ehliyet alamaz."
 
-# Excel dosyasını okur
-df = pd.read_excel("yas_verileri.xlsx")
-
-# "Yaş" sütunu üzerinden ehliyet alabilir mi hesaplanmasını sağlar
+# Ehliyet durumunu hesaplar
 df["Ehliyet Durumu"] = df["Yaş"].apply(ehliyet_kontrol)
 
-# Sonuçları yeni bir Excel dosyasına kaydeder
+# Sonucu yeni Excel dosyasına kaydeder
 df.to_excel("ehliyet_durumu.xlsx", index=False)
 
-print("Ehliyet durumu dosyaya kaydedildi.")
+print("Ehliyet durumu başarıyla kaydedildi.")
