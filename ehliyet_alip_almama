@@ -1,0 +1,15 @@
+import pandas as pd
+
+def ehliyet_kontrol(yas):
+    return "Ehliyet alabilir." if yas >= 18 else "Ehliyet alamaz."
+
+# Excel dosyasını okur
+df = pd.read_excel("yas_verileri.xlsx")
+
+# "Yaş" sütunu üzerinden ehliyet alabilir mi hesaplar
+df["Ehliyet Durumu"] = df["Yaş"].apply(ehliyet_kontrol)
+
+# Sonuçları yeni bir Excel dosyasına kaydeder
+df.to_excel("ehliyet_durumu.xlsx", index=False)
+
+print("Ehliyet durumu dosyaya kaydedildi.")
