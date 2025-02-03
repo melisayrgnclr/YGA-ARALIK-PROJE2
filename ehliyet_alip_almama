@@ -13,8 +13,11 @@ if "Yaş" not in df.columns:
 else:
     print("'Yaş' sütunu bulundu.")
 
-# "Yaş" sütununu sayıya çevirir
+# "Yaş" sütununu sayıya çevirir (geçersiz değerleri NaN yapar)
 df["Yaş"] = pd.to_numeric(df["Yaş"], errors="coerce")
+
+# Hatalı yaşları kontrol et ve işaretler
+df["Hatalı Veri"] = ["Evet" if x < 0 else "Hayır" for x in df["Yaş"]]
 
 # Ehliyet kontrol fonksiyonu yazılır
 def ehliyet_kontrol(yas):
