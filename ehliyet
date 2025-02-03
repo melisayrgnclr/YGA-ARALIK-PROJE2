@@ -1,0 +1,17 @@
+#Excel tablosundaki yaş sütununa göre ehliyet alıp almayacağını belirten program
+import pandas as pd
+
+#Ehliyet alıp almamamasını fonksiyonla kontrol eder
+def ehliyet_kontrol(yas):
+    return "Ehliyet alabilir." if yas >= 18 else "Ehliyet alamaz."
+
+# Excel dosyasını okur
+df = pd.read_excel("yas_verileri.xlsx")
+
+# "Yaş" sütunu üzerinden ehliyet alabilir mi hesaplanmasını sağlar
+df["Ehliyet Durumu"] = df["Yaş"].apply(ehliyet_kontrol)
+
+# Sonuçları yeni bir Excel dosyasına kaydeder
+df.to_excel("ehliyet_durumu.xlsx", index=False)
+
+print("Ehliyet durumu dosyaya kaydedildi.")
