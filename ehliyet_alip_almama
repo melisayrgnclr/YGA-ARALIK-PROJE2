@@ -1,15 +1,29 @@
 import pandas as pd
+import os
 
+# Excel dosyasını okur
+df = pd.read_excel("yas_verileri.xlsx", engine="openpyxl")
+
+# Sütunları kontrol eder
+print("Sütunlar:", df.columns)
+
+# Eğer "Yaş" sütunu yanlış isimlendirilmişse düzeltir
+if "Yaş" not in df.columns:
+    print("Hata: 'Yaş' sütunu bulunamadı, sütun isimlerini kontrol edin.")
+else:
+    print("'Yaş' sütunu bulundu.")
+
+# "Yaş" sütununu sayıya çevirir
+df["Yaş"] = pd.to_numeric(df["Yaş"], errors="coerce")
+
+# Ehliyet kontrol fonksiyonu yazılır
 def ehliyet_kontrol(yas):
     return "Ehliyet alabilir." if yas >= 18 else "Ehliyet alamaz."
 
-# Excel dosyasını okur
-df = pd.read_excel("yas_verileri.xlsx")
-
-# "Yaş" sütunu üzerinden ehliyet alabilir mi hesaplar
+# Ehliyet durumunu hesaplar
 df["Ehliyet Durumu"] = df["Yaş"].apply(ehliyet_kontrol)
 
-# Sonuçları yeni bir Excel dosyasına kaydeder
+# Sonucu yeni Excel dosyasına kaydeder
 df.to_excel("ehliyet_durumu.xlsx", index=False)
 
-print("Ehliyet durumu dosyaya kaydedildi.")
+print("Ehliyet durumu başarıyla kaydedildi.")
